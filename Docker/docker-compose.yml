@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./../public/:/usr/share/nginx/app:ro
+    ports:
+      - ${HTTP_PORT}:80
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - performance
+
+  php:
+    container_name: php
+    restart: always
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+      args:
+        - HTTP_PORT=${HTTP_PORT}
+        - BF_ID=${BF_ID}
+        - BF_TOKEN=${BF_TOKEN}
+    volumes:
+      - ./../public/:/usr/share/nginx/app:delegated
+    depends_on:
+      - mysql
+    networks:
+      - performance
+
+  mysql:
+    container_name: mysql
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./mysql/datastore:/var/lib/mysql:cached
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASS}
+    networks:
+      - performance
+
+networks:
+  performance:
+    driver: bridge
