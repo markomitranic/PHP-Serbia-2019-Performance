@@ -9,6 +9,6 @@ foreach ($fibonacci as $item) {
 
 function expensiveEOL($lineContent): string
 {
-    usleep(0.2 * 1000000);
+//    usleep(0.2 * 1000000);
     return $lineContent . '<br>';
 }
