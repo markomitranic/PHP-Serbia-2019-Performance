@@ -35,6 +35,9 @@ COPY conf/blackfire.ini /etc/blackfire/agent
 RUN echo "server-id=${BF_ID}" >> /etc/blackfire/agent \
     && echo "server-token=${BF_TOKEN}" >> /etc/blackfire/agent
 
+# Composer Install
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 COPY entrypoint.sh /home/root/entrypoint.sh
 RUN chmod 0775 /home/root/entrypoint.sh
 ENTRYPOINT /home/root/entrypoint.sh
