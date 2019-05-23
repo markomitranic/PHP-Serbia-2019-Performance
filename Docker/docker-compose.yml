@@ -17,7 +17,7 @@ services:
       - mysql
     networks:
       - performance
-    command: [nginx-debug, '-g', 'daemon off;']
+#    command: [nginx-debug, '-g', 'daemon off;']
 
   php:
     container_name: php
