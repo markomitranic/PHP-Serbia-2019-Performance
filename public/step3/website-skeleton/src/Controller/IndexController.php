@@ -31,13 +31,16 @@ class IndexController extends AbstractController
      */
     public function findUserApi(AuthorsRepository $repository, string $id)
     {
-        $authorCache = new FilesystemAdapter('author', 3600);
+        $author = $repository->find($id);
 
-        $author = $authorCache->get($id, function (ItemInterface $item) use ($repository, $id){
-            $item->expiresAfter(3600);
-            $author = $repository->find($id);
-            return $author;
-        });
+//        // This is how we can use Symfony Cache to cache to disk.
+//        $authorCache = new FilesystemAdapter('author', 3600);
+//
+//        $author = $authorCache->get($id, function (ItemInterface $item) use ($repository, $id){
+//            $item->expiresAfter(3600);
+//            $author = $repository->find($id);
+//            return $author;
+//        });
 
         return new JsonResponse($author);
     }
