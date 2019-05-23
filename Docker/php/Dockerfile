@@ -7,7 +7,6 @@ ENV BF_ID=$BF_ID
 ARG BF_TOKEN
 ENV BF_TOKEN=$BF_TOKEN
 
-
 RUN apt-get update
 RUN apt-get install nano -y
 RUN apt-get install wget -y

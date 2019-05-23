@@ -31,8 +31,6 @@ services:
         - BF_TOKEN=${BF_TOKEN}
     volumes:
       - ./../public/:/usr/share/nginx/app:delegated
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
     depends_on:
       - mysql
     networks:
