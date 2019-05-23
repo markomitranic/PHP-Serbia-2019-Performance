@@ -17,6 +17,7 @@ services:
       - mysql
     networks:
       - performance
+    command: [nginx-debug, '-g', 'daemon off;']
 
   php:
     container_name: php
@@ -30,6 +31,8 @@ services:
         - BF_TOKEN=${BF_TOKEN}
     volumes:
       - ./../public/:/usr/share/nginx/app:delegated
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     depends_on:
       - mysql
     networks:
@@ -43,6 +46,7 @@ services:
     restart: always
     volumes:
       - ./mysql/datastore:/var/lib/mysql:cached
+      - ./mysql/fixtures/data.sql:/docker-entrypoint-initdb.d/dump.sql
     ports:
       - ${MYSQL_PORT}:3306
     environment:
