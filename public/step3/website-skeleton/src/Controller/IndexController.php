@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Form\AuthorFilterType;
 use App\Repository\AuthorsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Class IndexController
@@ -29,7 +31,15 @@ class IndexController extends AbstractController
      */
     public function findUserApi(AuthorsRepository $repository, string $id)
     {
-        $user = $repository->find($id);
-        return new JsonResponse($user);
+        $authorCache = new FilesystemAdapter('author', 3600);
+
+        $author = $authorCache->get($id, function (ItemInterface $item) use ($repository, $id){
+            $item->expiresAfter(3600);
+            $author = $repository->find($id);
+            return $author;
+        });
+
+        return new JsonResponse($author);
     }
+
 }
