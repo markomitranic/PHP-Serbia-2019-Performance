@@ -1,7 +1,7 @@
 web_profiler_wdt:
     resource: '@WebProfilerBundle/Resources/config/routing/wdt.xml'
-    prefix: /step2/_wdt
+    prefix: /step4/_wdt
 
 web_profiler_profiler:
     resource: '@WebProfilerBundle/Resources/config/routing/profiler.xml'
-    prefix: /step2/_profiler
+    prefix: /step4/_profiler
