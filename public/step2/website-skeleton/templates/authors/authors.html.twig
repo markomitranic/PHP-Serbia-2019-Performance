@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authors{% endblock %}
+
+
+{% block body %}
+    <h1>Authors list</h1>
+    {{ form(form) }}
+    <table>
+        <tr><th>First name</th><th>Last name</th><th>Email</th><th>Birth date</th></tr>
+    {% for author in authors %}
+        <tr><td>{{ author.firstName }}</td><td>{{ author.lastName }}</td><td>{{ author.email }}</td><td>{{ author.birthdate|date('Y-m-d') }}</td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}
