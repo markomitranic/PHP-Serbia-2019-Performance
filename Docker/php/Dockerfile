@@ -10,6 +10,7 @@ ENV BF_TOKEN=$BF_TOKEN
 RUN apt-get update
 RUN apt-get install nano -y
 RUN apt-get install wget -y
+RUN apt-get install unzip -y
 
 RUN docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mysqli

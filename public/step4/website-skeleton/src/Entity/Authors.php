@@ -24,6 +24,13 @@ class Authors implements \JsonSerializable
     /**
      * @var string
      *
+     * @ORM\Column(name="password", type="string", length=128, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="first_name", type="string", length=50, nullable=false)
      */
     private $firstName;
@@ -50,11 +57,14 @@ class Authors implements \JsonSerializable
     private $birthdate;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="added", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
-    private $added = 'current_timestamp()';
+    private $added;
+
+    public function __construct()
+    {
+        $this->setAdded(new \DateTime());
+    }
 
     /**
      * @return int
@@ -72,6 +82,24 @@ class Authors implements \JsonSerializable
     {
         $this->id = $id;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return Authors
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 17]);
         return $this;
     }
 

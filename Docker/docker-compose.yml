@@ -45,6 +45,7 @@ services:
     volumes:
       - ./mysql/datastore:/var/lib/mysql:cached
       - ./mysql/fixtures/data.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./mysql/fixtures/step4_db.sql:/docker-entrypoint-initdb.d/step4_db.sql
     ports:
       - ${MYSQL_PORT}:3306
     environment:

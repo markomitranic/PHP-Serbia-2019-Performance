@@ -2,8 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Authors;
 use App\Form\AuthorFilterType;
 use App\Repository\AuthorsRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,25 +24,21 @@ class IndexController extends AbstractController
 {
 
     /**
-     * @Route("/step3/")
+     * @Route("/step4/")
      */
-    public function list()
+    public function generateUser(EntityManagerInterface $entityManager)
     {
-        return $this->render('authors/authors.html.twig');
-    }
+        $faker = Factory::create();
 
-    /**
-     * @Route("/step3/user/{id}")
-     */
-    public function findUserApi(AuthorsRepository $repository, string $id)
-    {
-        $authorCache = new FilesystemAdapter('author', 3600);
+        $author = new Authors();
+        $author->setFirstName($faker->firstName);
+        $author->setLastName($faker->lastName);
+        $author->setEmail($faker->safeEmail);
+        $author->setBirthdate($faker->dateTime);
+        $author->setPassword('this_is_a_test_password');
 
-        $author = $authorCache->get($id, function (ItemInterface $item) use ($repository, $id){
-            $item->expiresAfter(3600);
-            $author = $repository->find($id);
-            return $author;
-        });
+        $entityManager->persist($author);
+        $entityManager->flush($author);
 
         return new JsonResponse($author);
     }
