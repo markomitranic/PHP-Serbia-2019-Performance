@@ -8,4 +8,9 @@ COMPOSER_ALLOW_SUPERUSER=1 composer install
 APP_ENV=dev APP_DEBUG=1 php bin/console cache:clear
 echo "[Operation] Composer deployment finished for step2."
 
+cd /usr/share/nginx/app/step3/website-skeleton/
+COMPOSER_ALLOW_SUPERUSER=1 composer install
+APP_ENV=dev APP_DEBUG=1 php bin/console cache:clear
+echo "[Operation] Composer deployment finished for step3."
+
 php-fpm

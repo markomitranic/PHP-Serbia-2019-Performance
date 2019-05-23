@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authors{% endblock %}
+
+
+{% block body %}
+    <h1>Authors list</h1>
+
+    <ul id="author-list">
+        <li class="template">
+            <div class="wrap">
+                <div class="loader">Loading...</div>
+                <div class="wrapper">
+                    <div class="name">Marko</div>
+                    <div class="lastname">Mitranic</div>
+                    <div class="email">marko.mitranic@gmail.com</div>
+                    <div class="birthdate">22.05.1991</div>
+                    <div class="id">#12</div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        'use strict';
+
+        var list = document.querySelector('#author-list');
+        var template = document.querySelector('.template');
+
+        var _loop = function _loop(i) {
+            var newItem = template.cloneNode(true);
+            newItem.classList.remove('template');
+            list.appendChild(newItem);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/step3/user/' + i);
+            xhr.onload = function () {
+                var details = JSON.parse(xhr.response);
+                newItem.querySelector('.wrap').classList.add('loaded');
+                newItem.querySelector('.name').innerText = details.firstName;
+                newItem.querySelector('.lastname').innerText = details.lastName;
+                newItem.querySelector('.email').innerText = details.email;
+                newItem.querySelector('.birthdate').innerText = details.birthdate.date;
+                newItem.querySelector('.id').innerText = '#' + details.id;
+            };
+            xhr.send();
+        };
+
+        for (var i = 1; i < 21; i++) {
+            _loop(i);
+        }
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        ul {
+            display: flex;
+            width: 100%;
+            max-width: 600px;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-between;
+        }
+        ul li {
+            display: block;
+            width: calc(49% - 20px);
+            margin: 10px;
+            background: #ececec;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: #dadada 1px 1px 3px 0px;
+        }
+        ul li.template {
+            display: none;
+        }
+        ul li > div.loaded .loader {
+            display: none;
+        }
+        ul li > div.loaded .wrapper {
+            display: block;
+        }
+        ul li > div .wrapper {
+            display: none;
+        }
+    </style>
+    <style>
+        body {
+            padding-bottom: 200px;
+        }
+        .loader {
+            color: #ffffff;
+            font-size: 90px;
+            text-indent: -9999em;
+            overflow: hidden;
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            margin: 72px auto;
+            position: relative;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
+            animation: load6 1.7s infinite ease, round 1.7s infinite ease;
+        }
+        @-webkit-keyframes load6 {
+            0% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            5%,
+            95% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            10%,
+            59% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+            }
+            20% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+            }
+            38% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+            }
+            100% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+        }
+        @keyframes load6 {
+            0% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            5%,
+            95% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            10%,
+            59% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+            }
+            20% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+            }
+            38% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+            }
+            100% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+        }
+        @-webkit-keyframes round {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes round {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
