@@ -31,12 +31,12 @@ class ImageCacheService
     {
         $imageCache = new FilesystemAdapter('imageCache', 3600);
 
-        $filePath = pathinfo($filePath, PATHINFO_FILENAME);
+        $cacheName = pathinfo($filePath, PATHINFO_FILENAME);
 
         $roundFilter = $this->roundFilter;
         $cropFilter = $this->cropFilter;
 
-        $compressedImagePath = $imageCache->get($filePath, function (ItemInterface $item) use ($filePath, $roundFilter, $cropFilter) {
+        $compressedImagePath = $imageCache->get($cacheName, function (ItemInterface $item) use ($filePath, $roundFilter, $cropFilter) {
             $roundedImageFileName = $roundFilter->filter($filePath);
             $croppedImageFileName = $cropFilter->filter($roundedImageFileName);
             return $croppedImageFileName;
