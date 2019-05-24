@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authors{% endblock %}
+
+
+{% block body %}
+    <h1>This is a Thumbnail version of the original image.</h1>
+    <img src="{{ compressed }}" alt="">
+    <a href="{{ original }}">The original image can be found here.</a>
+{% endblock %}

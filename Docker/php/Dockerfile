@@ -16,8 +16,12 @@ RUN docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mysqli
 
 RUN apt-get install -y libzip-dev
-
 RUN docker-php-ext-install zip
+
+RUN apt-get install libjpeg-dev libpng-dev -y
+RUN docker-php-ext-configure gd \
+        --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd
 
 COPY conf/php-fpm.conf /usr/local/etc/php-fpm.d/zzz-fpm.conf
 COPY conf/php.ini /usr/local/etc/php/conf.d/custom-php.ini
