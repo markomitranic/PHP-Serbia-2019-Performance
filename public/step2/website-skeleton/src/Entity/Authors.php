@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="authors", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @ORM\Entity(repositoryClass="App\Repository\AuthorsRepository")
  */
-class Authors
+class Authors implements \JsonSerializable
 {
     /**
      * @var int
@@ -20,6 +20,13 @@ class Authors
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=128, nullable=false)
+     */
+    private $password;
 
     /**
      * @var string
@@ -50,11 +57,14 @@ class Authors
     private $birthdate;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="added", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
-    private $added = 'current_timestamp()';
+    private $added;
+
+    public function __construct()
+    {
+        $this->setAdded(new \DateTime());
+    }
 
     /**
      * @return int
@@ -72,6 +82,24 @@ class Authors
     {
         $this->id = $id;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return Authors
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 17]);
         return $this;
     }
 
@@ -168,5 +196,20 @@ class Authors
         $this->added = $added;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'email' => $this->getEmail(),
+            'birthdate' => $this->getBirthdate(),
+            'added' => $this->getAdded()
+        ];
     }
 }

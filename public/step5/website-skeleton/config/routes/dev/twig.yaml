@@ -1,3 +1,0 @@
-_errors:
-    resource: '@TwigBundle/Resources/config/routing/errors.xml'
-    prefix: /step5/_error

@@ -2,11 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Authors;
 use App\Form\AuthorFilterType;
 use App\Repository\AuthorsRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Class IndexController
@@ -18,18 +26,21 @@ class IndexController extends AbstractController
     /**
      * @Route("/step2/")
      */
-    public function number(Request $request, AuthorsRepository $repository)
+    public function generateUser(EntityManagerInterface $entityManager)
     {
-        $form = $this->createForm(AuthorFilterType::class);
-        $form->handleRequest($request);
+        $faker = Factory::create();
 
-        $authors = [];
-        if ($form->isSubmitted() && $form->isValid()) {
-            $dates = $form->getData();
-            $authors = $repository->getBornBetween($dates['dateFrom'], $dates['dateTo']);
+        $author = new Authors();
+        $author->setFirstName($faker->firstName);
+        $author->setLastName($faker->lastName);
+        $author->setEmail($faker->safeEmail);
+        $author->setBirthdate($faker->dateTime);
+        $author->setPassword('this_is_a_test_password');
 
-        }
+        $entityManager->persist($author);
+        $entityManager->flush($author);
 
-        return $this->render('authors/authors.html.twig', ['form' => $form->createView(), 'authors' => $authors]);
+        return new JsonResponse($author);
     }
+
 }

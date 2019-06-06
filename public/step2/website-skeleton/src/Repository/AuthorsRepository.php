@@ -18,6 +18,12 @@ class AuthorsRepository extends ServiceEntityRepository
         parent::__construct($registry, Authors::class);
     }
 
+    public function find($id, $lockMode = null, $lockVersion = null)
+    {
+        sleep(rand(1,3)); // A very unreliable database :P
+        return parent::find($id, $lockMode, $lockVersion);
+    }
+
     /**
      * @param \DateTime $from
      * @param \DateTime $to
